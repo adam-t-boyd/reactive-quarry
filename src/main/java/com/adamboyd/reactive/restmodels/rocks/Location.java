@@ -1,4 +1,4 @@
-package com.adamboyd.reactive.restmodels;
+package com.adamboyd.reactive.restmodels.rocks;
 
 import lombok.Builder;
 import lombok.Data;

@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Car {
+public class QuarryBO {
     @Id
     private BigDecimal id;
     private BigDecimal brand;
