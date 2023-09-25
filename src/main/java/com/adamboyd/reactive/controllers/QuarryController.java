@@ -1,69 +1,44 @@
 package com.adamboyd.reactive.controllers;
 
-import com.adamboyd.reactive.restmodels.rocks.Country;
-import com.adamboyd.reactive.restmodels.rocks.Location;
 import com.adamboyd.reactive.restmodels.rocks.Quarry;
+import com.adamboyd.reactive.services.QuarryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
-import java.util.Arrays;
-
-import static java.util.Locale.getISOCountries;
 
 @RestController
 @RequestMapping("/quarry")
+@RequiredArgsConstructor
 public class QuarryController {
-    @GetMapping("/{quarryId}")
-    public Mono<Quarry> getQuarry(@PathVariable Integer quarryId) {
-        return Mono.just(Quarry.builder()
-                .quarryId(BigDecimal.valueOf(quarryId))
-                .establishedDate(ZonedDateTime.now())
-                .disused(true)
-                .location(Location.builder()
-                        .address("Address")
-                        .country(Country.builder()
-                                .countryName("Northern Ireland")
-                                .isoCountryCode(Arrays.stream(getISOCountries()).filter(x -> x.contains("GB")).toList().get(0))
-                                .build())
-                        .latitude(new BigDecimal("43.40"))
-                        .longitude(new BigDecimal("44.56"))
-                        .build())
-                .build());
-    }
+
+    private final QuarryService quarryService;
 
     @GetMapping()
-    public Quarry getQuarrys() {
-        return Quarry.builder()
-                .quarryId(BigDecimal.valueOf(1))
-                .establishedDate(ZonedDateTime.now())
-                .disused(true)
-                .location(Location.builder()
-                        .address("Address")
-                        .country(Country.builder()
-                                .countryName("Northern Ireland")
-                                .isoCountryCode(Arrays.stream(getISOCountries()).filter(x -> x.contains("GB")).toList().get(0))
-                                .build())
-                        .latitude(new BigDecimal("43.40"))
-                        .longitude(new BigDecimal("44.56"))
-                        .build())
-                .build();
+    public Flux<Quarry> getQuarries() {
+        return quarryService.getQuarries();
+    }
+
+    @GetMapping("/{quarryId}")
+    public Mono<Quarry> getQuarry(@PathVariable BigDecimal quarryId) {
+        return quarryService.getQuarry(quarryId);
     }
 
     @PostMapping()
     public Mono<Quarry> createQuarry(@RequestBody Quarry quarry) {
-        return Mono.just(quarry);
+        return quarryService.createQuarry(quarry);
     }
 
     @PutMapping("/quarryId")
     public Mono<Quarry> updateQuarry(@PathVariable("quarryId") BigDecimal quarryId,
                                      @RequestBody Quarry quarry) {
-        return Mono.just(quarry);
+        return quarryService.updateQuarry(quarryId, quarry);
     }
 
     @DeleteMapping("/quarryId")
     public Mono<Void> deleteQuarry(@PathVariable("quarryId") BigDecimal quarryId) {
-        return Mono.empty();
+        return quarryService.deleteQuarry(quarryId);
     }
 }
