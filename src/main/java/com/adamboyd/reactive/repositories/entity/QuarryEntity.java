@@ -5,7 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -14,5 +14,5 @@ public class QuarryEntity {
     @Id
     private Integer id;
     private Boolean disused;
-    private ZonedDateTime establisheddate;
+    private LocalDateTime establisheddate;
 }

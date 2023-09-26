@@ -12,8 +12,10 @@ class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        http
+        http/*.cors(ServerHttpSecurity.CorsSpec::disable)*/
                 .csrf(ServerHttpSecurity.CsrfSpec::disable);
+//                .authorizeExchange(auth -> auth.pathMatchers("/quarry/**").permitAll()
+//                );
         return http.build();
     }
 
