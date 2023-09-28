@@ -1,8 +1,8 @@
 package com.adamboyd.reactive.data;
 
-import com.adamboyd.reactive.restmodels.rocks.Country;
-import com.adamboyd.reactive.restmodels.rocks.Location;
-import com.adamboyd.reactive.restmodels.rocks.Quarry;
+import com.adamboyd.reactive.models.restmodels.rocks.Country;
+import com.adamboyd.reactive.models.restmodels.rocks.Location;
+import com.adamboyd.reactive.models.restmodels.rocks.Quarry;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;

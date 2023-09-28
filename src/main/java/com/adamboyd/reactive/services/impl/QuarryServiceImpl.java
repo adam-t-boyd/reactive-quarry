@@ -1,8 +1,8 @@
 package com.adamboyd.reactive.services.impl;
 
-import com.adamboyd.reactive.repositories.entity.QuarryEntity;
-import com.adamboyd.reactive.repositories.entity.QuarryRepository;
-import com.adamboyd.reactive.restmodels.rocks.Quarry;
+import com.adamboyd.reactive.models.businessobjects.QuarryEntity;
+import com.adamboyd.reactive.models.restmodels.rocks.Quarry;
+import com.adamboyd.reactive.repositories.QuarryRepository;
 import com.adamboyd.reactive.services.QuarryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

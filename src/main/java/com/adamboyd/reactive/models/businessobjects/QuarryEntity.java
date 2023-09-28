@@ -1,16 +1,18 @@
-package com.adamboyd.reactive.repositories.entity;
+package com.adamboyd.reactive.models.businessobjects;
 
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
-@Table("country")
-public class CountryEntity {
+@Table("quarry")
+public class QuarryEntity {
     @Id
     private Integer id;
-    private String countryName;
-    private String isoCountryCode;
+    private Boolean disused;
+    private LocalDateTime establisheddate;
 }

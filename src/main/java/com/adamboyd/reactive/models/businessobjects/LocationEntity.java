@@ -1,4 +1,4 @@
-package com.adamboyd.reactive.repositories.entity;
+package com.adamboyd.reactive.models.businessobjects;
 
 import lombok.Builder;
 import lombok.Data;

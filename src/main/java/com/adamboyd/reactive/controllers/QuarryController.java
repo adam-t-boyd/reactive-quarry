@@ -1,6 +1,6 @@
 package com.adamboyd.reactive.controllers;
 
-import com.adamboyd.reactive.restmodels.rocks.Quarry;
+import com.adamboyd.reactive.models.restmodels.rocks.Quarry;
 import com.adamboyd.reactive.services.QuarryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
