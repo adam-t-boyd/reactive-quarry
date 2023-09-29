@@ -4,14 +4,18 @@ import com.adamboyd.reactive.repositories.UserDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-
-import java.util.Optional;
+import reactor.core.publisher.Mono;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -19,11 +23,8 @@ import java.util.Optional;
 class SecurityConfig {
 
     private final UserDetailsRepository userDetailsRepository;
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
 
     /*@Order(Ordered.HIGHEST_PRECEDENCE)
     @Bean
@@ -49,10 +50,30 @@ class SecurityConfig {
         return new MapReactiveUserDetailsService(users);
     }
 
+    // encodes password, fetches user details
     @Bean
-    ReactiveUserDetailsService userDetailsService() {
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
+    @Bean
+    public AuthenticationManager reactiveAuthenticationManager(AuthenticationConfiguration configuration)
+            throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public ReactiveUserDetailsService userDetailsService() {
         return username -> userDetailsRepository.findByEmail(username)
-                .onErrorReturn(new UsernameNotFoundException("User not found"), Optional.empty());
+                .doOnError(throwable -> Mono.error(new UsernameNotFoundException("User not found")));
     }
 
     @Bean
@@ -66,9 +87,10 @@ class SecurityConfig {
         return http
                 .authorizeExchange(auth -> {
                     auth.anyExchange().permitAll();
-                      /*  auth.pathMatchers("/login").permitAll();
-                        auth.anyExchange().authenticated();*/
+                    auth.pathMatchers("/api/v1/auth/**").permitAll();
+                    auth.anyExchange().authenticated();
                 })
+                .addFilterBefore(jwtAuthFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)

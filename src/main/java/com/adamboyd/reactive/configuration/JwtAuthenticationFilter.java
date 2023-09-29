@@ -41,10 +41,17 @@ public class JwtAuthenticationFilter implements WebFilter {
             // TODO blocking call
             if (jwtService.isTokenValid(jwt, userDetails.block())) {
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null,
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
                                 userDetails.block().getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(exchange.getRequest()));
+
+                authenticationToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(exchange.getRequest()));
+
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
+        filter(exchange, webFilterChain);
     }
 }
