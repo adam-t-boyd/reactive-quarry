@@ -1,4 +1,4 @@
-package com.adamboyd.reactive.auth;
+package com.adamboyd.reactive.auth.restmodels;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,5 +1,6 @@
-package com.adamboyd.reactive.models.restwrappers;
+package com.adamboyd.reactive.models.businessobjects;
 
+import com.adamboyd.reactive.auth.restmodels.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
