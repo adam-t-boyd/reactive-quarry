@@ -1,10 +1,12 @@
-package com.adamboyd.reactive.auth;
+package com.adamboyd.reactive.auth.utils;
 
+import com.adamboyd.reactive.auth.restmodels.BearerToken;
+import com.adamboyd.reactive.auth.services.JwtService;
+import com.adamboyd.reactive.auth.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -13,7 +15,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class AuthManager implements ReactiveAuthenticationManager {
     private final JwtService jwtService;
-    private final ReactiveUserDetailsService users;
+    private final UserDetailsServiceImpl users;
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
@@ -23,7 +25,9 @@ public class AuthManager implements ReactiveAuthenticationManager {
                 .cast(BearerToken.class)
                 .flatMap(bearerToken -> {
                     final String username = jwtService.extractUsername(bearerToken.getCredentials());
-                    final Mono<UserDetails> foundUser = users.findByUsername(username).defaultIfEmpty(null);
+                    final Mono<UserDetails> foundUser = users.getUserDetailsByUsername(username).defaultIfEmpty(null);
+//                    final Mono<UserDetails> foundUser = users.findByUsername(username).defaultIfEmpty(null);
+                    // get rid of default if empty
                     if (foundUser.equals(Mono.empty())) {
                         Mono.error(new IllegalArgumentException(String.format(
                                 "Username: %s not found in Auth Manager.", username)));

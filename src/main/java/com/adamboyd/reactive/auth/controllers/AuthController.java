@@ -1,10 +1,11 @@
-package com.adamboyd.reactive.auth;
+package com.adamboyd.reactive.auth.controllers;
 
 import com.adamboyd.reactive.auth.restmodels.AuthenticationRequest;
+import com.adamboyd.reactive.auth.services.JwtService;
+import com.adamboyd.reactive.auth.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -16,14 +17,14 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final ReactiveUserDetailsService users;
+    private final UserDetailsServiceImpl userDetailsService;
     private final JwtService jwtService;
     private final PasswordEncoder encoder;
 
     @PostMapping("/login")
     public Mono<ResponseEntity<String>> login(@RequestBody AuthenticationRequest authenticationRequest) {
-        Mono<UserDetails> foundUser = users
-                .findByUsername(authenticationRequest.getEmail())
+        Mono<User> foundUser = userDetailsService
+                .findByEmail(authenticationRequest.getEmail())
                 .defaultIfEmpty(null);
 
         if (foundUser.equals(Mono.empty())) {
@@ -32,8 +33,8 @@ public class AuthController {
         }
 
         return foundUser.flatMap(userDetails -> {
-            if (encoder.matches(authenticationRequest.getPassword(), userDetails.getPassword())) {
-                return Mono.just(ResponseEntity.ok().body(jwtService.generateToken(userDetails)));
+            if (encoder.matches(authenticationRequest.getPassword(), userDetails.get().getPassword())) {
+                return Mono.just(ResponseEntity.ok().body(jwtService.generateToken(userDetails.get())));
             }
             return Mono.just(ResponseEntity.status(UNAUTHORIZED).body("Invalid Credentials."));
         });

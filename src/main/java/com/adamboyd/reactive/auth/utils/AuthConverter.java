@@ -1,5 +1,6 @@
-package com.adamboyd.reactive.auth;
+package com.adamboyd.reactive.auth.utils;
 
+import com.adamboyd.reactive.auth.restmodels.BearerToken;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;

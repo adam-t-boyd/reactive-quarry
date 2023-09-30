@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,12 +24,17 @@ public class UserDetailsEntity implements UserDetails {
     @Id
     private Integer id;
 
+    @Column("first_name")
     private String firstname;
 
+    @Column("last_name")
     private String lastname;
+    private String username;
 
     private String email;
     private String password;
+
+    @Column("user_role")
     private Role role;
 
     @Override
