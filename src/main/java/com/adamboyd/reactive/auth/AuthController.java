@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -45,12 +45,7 @@ public class AuthController {
         return Mono.just(ResponseEntity.ok(authenticationService.register(registerRequest)));
     }*/
 
-    /* @PostMapping("/authenticate")
-     public Mono<ResponseEntity<AuthenticationResponse>> register(
-             @RequestBody AuthenticationRequest authenticationRequest) {
-         return Mono.just(ResponseEntity.ok(authenticationService.authenticate(authenticationRequest)));
-     }*/
-    @GetMapping("/auth")
+    @GetMapping("/authenticate")
     public Mono<ResponseEntity<String>> auth() {
         return Mono.just(ResponseEntity.ok().body("Auth worked!"));
     }
