@@ -13,7 +13,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
-import static com.adamboyd.reactive.auth.restmodels.Role.ADMIN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestController
@@ -45,22 +44,23 @@ public class AuthController {
                 });
     }
 
-    // login works, but doesnt decrypt the db password. Needs to.
+    // login works, but doesn't decrypt the db password. Needs to.
     // register needs to encode password to store in backend. needs to be available without token.
+    // - need to do exception handling. throw error sthat are handled by controller advice.
     @PostMapping("/register")
     public Mono<ResponseEntity<String>> register(
             @RequestBody RegisterRequest registerRequest) {
-
         final Mono<AuthenticationResponse> userDetails = userDetailsService.createUserDetails(
                 new RegisterRequest(
-                        registerRequest.getId(),
+                        registerRequest.getEmail(),
                         registerRequest.getUsername(),
                         registerRequest.getPassword(),
-                        ADMIN.getName(),
-                        registerRequest.getEmail()));
+                        registerRequest.getFirstname(),
+                        registerRequest.getLastname()
+                ));
 
         return userDetails.map(AuthenticationResponse::getToken)
-                .map(s -> ResponseEntity.ok().body(String.format("Welcome. Here's your JWT token %s", s)));
+                .map(s -> ResponseEntity.ok().body(String.format("Welcome! Here's your JWT token %s", s)));
     }
 
     @GetMapping("/authenticate")

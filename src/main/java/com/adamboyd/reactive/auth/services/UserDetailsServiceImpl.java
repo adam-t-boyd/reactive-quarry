@@ -6,6 +6,7 @@ import com.adamboyd.reactive.auth.restmodels.RegisterRequest;
 import com.adamboyd.reactive.auth.restmodels.Role;
 import com.adamboyd.reactive.models.businessobjects.UserDetailsEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,8 +14,10 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.ws.rs.BadRequestException;
 import java.math.BigDecimal;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -50,10 +53,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public Mono<AuthenticationResponse> createUserDetails(RegisterRequest registerRequest) {
+        validateCreateRequest(registerRequest);
         return userDetailsRepository.save(
                         UserDetailsEntity.builder()
-                                .id(registerRequest.getId())
-                                .email(registerRequest.getUsername())
+                                .id(null)
+                                .email(registerRequest.getEmail())
+                                .username(registerRequest.getUsername())
                                 .password(encoder.encode(registerRequest.getPassword()))
                                 .role(Role.ADMIN)
                                 .firstname(registerRequest.getFirstname())
@@ -73,5 +78,28 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public Mono<Void> deleteUserDetails(BigDecimal userId) {
         return null;
+    }
+
+    public void validateCreateRequest(RegisterRequest registerRequest) {
+        Mono<Boolean> isValidUsername = userDetailsRepository.existsByUsername(registerRequest.getUsername());
+        Mono<Boolean> isValidEmail = userDetailsRepository.existsByEmail(registerRequest.getEmail());
+
+        isValidEmail.map(aBoolean -> {
+            if (aBoolean.equals(true)) {
+                Mono.error(new BadRequestException("Email already in use."));
+            } else {
+                log.info("Passed email validation for create request.");
+            }
+            return aBoolean;
+        });
+
+        isValidUsername.map(aBoolean -> {
+            if (aBoolean.equals(true)) {
+                Mono.error(new BadRequestException("Username already in use."));
+            } else {
+                log.info("Passed username validation for create request.");
+            }
+            return aBoolean;
+        });
     }
 }

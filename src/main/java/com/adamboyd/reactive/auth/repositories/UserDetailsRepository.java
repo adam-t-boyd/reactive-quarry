@@ -11,4 +11,10 @@ public interface UserDetailsRepository extends R2dbcRepository<UserDetailsEntity
 
     Mono<UserDetailsEntity> findByUsername(String username);
 
+    Mono<Boolean> existsByUsername(String username);
+
+    Mono<Boolean> existsByEmail(String email);
+
+
+
 }

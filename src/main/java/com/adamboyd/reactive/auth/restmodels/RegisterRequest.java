@@ -1,30 +1,37 @@
 package com.adamboyd.reactive.auth.restmodels;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
-@Getter
-@Setter
-public class RegisterRequest extends User {
-    private Integer id;
+@Data
+@Builder
+public class RegisterRequest {
     private String firstname;
     private String lastname;
     private String email;
-    private String authority;
+    private String username;
+    private String password;
+//    private String authority;
+//    Set<GrantedAuthority> authorities;
 
-    public RegisterRequest(Integer id,
+
+    public RegisterRequest(
+            String email,
                            String username,
                            String password,
-                           String authority,
-                           String email) {
-        super(username, password,
-                List.of(new SimpleGrantedAuthority(authority)));
+            String firstname,
+            String lastname
+//                           String authority,
+    ) {
         this.email = email;
-        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        List.of(new SimpleGrantedAuthority(Role.ADMIN.getName()));
     }
 }
