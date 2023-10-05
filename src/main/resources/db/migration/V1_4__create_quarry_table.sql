@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS quarry;
+
 create table quarry (
 id SERIAL,
 establishedDate TIMESTAMP,

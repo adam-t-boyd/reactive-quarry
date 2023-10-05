@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user_details")
-public class UserDetailsEntity implements UserDetails {
+public class UserDetailsBO implements UserDetails {
     @Id
     private Integer id;
 

@@ -8,15 +8,18 @@ import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 
-public interface UserDetailsService {
-    Flux<User> getUserDetails();
+public interface UserService {
 
-    Mono<User> getUserDetails(BigDecimal userId);
+    Mono<User> getUserByUsername(String username);
 
-    Mono<AuthenticationResponse> createUserDetails(RegisterRequest user);
+    Flux<User> getUser();
 
-    Mono<User> updateUserDetails(BigDecimal userId, RegisterRequest user);
+    Mono<User> getUser(BigDecimal userId);
 
-    Mono<Void> deleteUserDetails(BigDecimal userId);
+    Mono<AuthenticationResponse> createUser(RegisterRequest user);
+
+    Mono<User> updateUser(BigDecimal userId, RegisterRequest user);
+
+    Mono<Void> deleteUser(BigDecimal userId);
 
 }

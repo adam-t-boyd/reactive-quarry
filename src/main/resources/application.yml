@@ -1,0 +1,15 @@
+spring:
+  r2dbc:
+    username: postgres
+    password: postgres
+    url: r2dbc:postgresql://localhost:5432/postgres
+  flyway:
+    url: jdbc:postgresql://localhost:5432/postgres
+    locations: classpath:db/postgres/migration
+  webflux:
+    base-path: /api/v1
+  security:
+    user:
+      roles: manager
+      password: adam
+      name: adam

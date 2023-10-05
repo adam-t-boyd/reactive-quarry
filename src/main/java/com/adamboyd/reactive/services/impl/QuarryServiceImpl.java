@@ -1,6 +1,6 @@
 package com.adamboyd.reactive.services.impl;
 
-import com.adamboyd.reactive.models.businessobjects.QuarryEntity;
+import com.adamboyd.reactive.models.businessobjects.QuarryBO;
 import com.adamboyd.reactive.models.restmodels.rocks.Quarry;
 import com.adamboyd.reactive.repositories.QuarryRepository;
 import com.adamboyd.reactive.services.QuarryService;
@@ -24,37 +24,37 @@ public class QuarryServiceImpl implements QuarryService {
     @Override
     public Flux<Quarry> getQuarries() {
         return quarryRepository.findAll()
-                .map(quarryEntity -> new Quarry(BigDecimal.valueOf(quarryEntity.getId()), null,
-                        toZonedDateTime(quarryEntity.getEstablisheddate()), quarryEntity.getDisused()));
+                .map(quarryBO -> new Quarry(BigDecimal.valueOf(quarryBO.getId()), null,
+                        toZonedDateTime(quarryBO.getEstablisheddate()), quarryBO.getDisused()));
     }
 
     @Override
     public Mono<Quarry> getQuarry(BigDecimal quarryId) {
         return quarryRepository.findById(quarryId)
-                .map(quarryEntity -> new Quarry(BigDecimal.valueOf(quarryEntity.getId()), null,
-                        toZonedDateTime(quarryEntity.getEstablisheddate()), quarryEntity.getDisused()));
+                .map(quarryBO -> new Quarry(BigDecimal.valueOf(quarryBO.getId()), null,
+                        toZonedDateTime(quarryBO.getEstablisheddate()), quarryBO.getDisused()));
     }
 
     @Override
     public Mono<Quarry> createQuarry(Quarry quarry) {
-        return quarryRepository.save(QuarryEntity.builder()
+        return quarryRepository.save(QuarryBO.builder()
                         .id(quarry.quarryId().intValue())
                         .disused(quarry.disused())
                         .establisheddate(quarry.establishedDate().toLocalDateTime())
                         .build())
-                .map(quarryEntity -> new Quarry(BigDecimal.valueOf(quarryEntity.getId()), null,
-                        toZonedDateTime(quarryEntity.getEstablisheddate()), quarryEntity.getDisused()));
+                .map(quarryBO -> new Quarry(BigDecimal.valueOf(quarryBO.getId()), null,
+                        toZonedDateTime(quarryBO.getEstablisheddate()), quarryBO.getDisused()));
     }
 
     @Override
     public Mono<Quarry> updateQuarry(BigDecimal quarryId, Quarry quarry) {
-        return quarryRepository.save(QuarryEntity.builder()
+        return quarryRepository.save(QuarryBO.builder()
                         .id(quarryId.intValue())
                         .disused(quarry.disused())
                         .establisheddate(quarry.establishedDate().toLocalDateTime())
                         .build())
-                .map(quarryEntity -> new Quarry(BigDecimal.valueOf(quarryEntity.getId()), null,
-                        toZonedDateTime(quarryEntity.getEstablisheddate()), quarryEntity.getDisused()));
+                .map(quarryBO -> new Quarry(BigDecimal.valueOf(quarryBO.getId()), null,
+                        toZonedDateTime(quarryBO.getEstablisheddate()), quarryBO.getDisused()));
     }
 
     @Override

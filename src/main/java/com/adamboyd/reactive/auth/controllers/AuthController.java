@@ -4,7 +4,7 @@ import com.adamboyd.reactive.auth.restmodels.AuthenticationRequest;
 import com.adamboyd.reactive.auth.restmodels.AuthenticationResponse;
 import com.adamboyd.reactive.auth.restmodels.RegisterRequest;
 import com.adamboyd.reactive.auth.services.JwtService;
-import com.adamboyd.reactive.auth.services.UserDetailsServiceImpl;
+import com.adamboyd.reactive.auth.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,14 +20,14 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserDetailsServiceImpl userDetailsService;
+    private final UserServiceImpl userDetailsService;
     private final JwtService jwtService;
     private final PasswordEncoder encoder;
 
     @PostMapping("/login")
     public Mono<ResponseEntity<String>> login(@RequestBody AuthenticationRequest authenticationRequest) {
         return userDetailsService
-                .findByEmail(authenticationRequest.getEmail())
+                .getUserByEmail(authenticationRequest.getEmail())
                 .map(Optional::of)
                 .defaultIfEmpty(Optional.empty())
                 .flatMap(optionalUser -> {
@@ -50,7 +50,7 @@ public class AuthController {
     @PostMapping("/register")
     public Mono<ResponseEntity<String>> register(
             @RequestBody RegisterRequest registerRequest) {
-        final Mono<AuthenticationResponse> userDetails = userDetailsService.createUserDetails(
+        final Mono<AuthenticationResponse> userDetails = userDetailsService.createUser(
                 new RegisterRequest(
                         registerRequest.getEmail(),
                         registerRequest.getUsername(),
