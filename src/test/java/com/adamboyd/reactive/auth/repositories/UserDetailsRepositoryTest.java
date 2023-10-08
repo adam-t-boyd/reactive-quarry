@@ -18,7 +18,7 @@ class UserDetailsRepositoryTest {
 
     @Test
     void findByEmail() {
-        insertQuarries();
+        insertUserDetailsBOs();
         userDetailsRepository.findByEmail("test@gmail.com")
                 .as(StepVerifier::create)
                 .expectNextCount(1)
@@ -37,13 +37,13 @@ class UserDetailsRepositoryTest {
     void existsByEmail() {
     }
 
-    public void insertQuarries() {
+    public void insertUserDetailsBOs() {
         List<UserDetailsBO> userDetailsBOS = Arrays.asList(
-                getUserDetailsBO(1, "test", "test123", ADMIN),
-                getUserDetailsBO(2, "test", "test123", ADMIN),
-                getUserDetailsBO(3, "test", "test123", ADMIN),
-                getUserDetailsBO(4, "test", "test123", USER),
-                getUserDetailsBO(5, "test", "test123", USER)
+                getUserDetailsBO(1, "test@gmail.com", "test", "test123", ADMIN),
+                getUserDetailsBO(2, "test@gmail.com", "test", "test123", ADMIN),
+                getUserDetailsBO(3, "test@gmail.com", "test", "test123", ADMIN),
+                getUserDetailsBO(4, "test@gmail.com", "test", "test123", USER),
+                getUserDetailsBO(5, "test@gmail.com", "test", "test123", USER)
         );
         userDetailsRepository.saveAll(userDetailsBOS).subscribe();
     }

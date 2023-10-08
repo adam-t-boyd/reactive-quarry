@@ -55,9 +55,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Mono<AuthenticationResponse> createUser(RegisterRequest registerRequest) {
-        areValidUserCredentials(registerRequest);
         return Mono.just(registerRequest)
-                .filterWhen(this::areValidUserCredentials)
+                .filterWhen(this::newUserCredentialsAreValid)
                 .flatMap(regReq -> userDetailsRepository.save(
                         UserDetailsBO.builder()
                                 .id(null)
@@ -83,27 +82,27 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    public Mono<Boolean> areValidUserCredentials(RegisterRequest registerRequest) {
-        Mono<Boolean> isInvalidUsername = userDetailsRepository.existsByUsername(registerRequest.getUsername())
+    public Mono<Boolean> newUserCredentialsAreValid(RegisterRequest registerRequest) {
+        Mono<Boolean> isValidUsername = userDetailsRepository.existsByUsername(registerRequest.getUsername())
                 .map(aBoolean -> {
                     if (Boolean.TRUE.equals(aBoolean)) {
                         Mono.error(new BadRequestException("Email already in use."));
                     } else {
                         log.info("Passed email validation for create request.");
                     }
-                    return aBoolean;
+                    return !aBoolean;
                 });
 
-        Mono<Boolean> isInvalidEmail = userDetailsRepository.existsByEmail(registerRequest.getEmail())
+        Mono<Boolean> isValidEmail = userDetailsRepository.existsByEmail(registerRequest.getEmail())
                 .map(aBoolean -> {
                     if (Boolean.TRUE.equals(aBoolean)) {
                         Mono.error(new BadRequestException("Username already in use."));
                     } else {
                         log.info("Passed username validation for create request.");
                     }
-                    return aBoolean;
+                    return !aBoolean;
                 });
 
-        return Mono.zip(isInvalidEmail, isInvalidUsername, (f, s) -> f && s);
+        return Mono.zip(isValidEmail, isValidUsername, (f, s) -> f && s);
     }
 }
