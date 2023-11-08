@@ -4,6 +4,7 @@ import com.adamboyd.reactive.auth.repositories.UserDetailsRepository;
 import com.adamboyd.reactive.auth.restmodels.AuthenticationResponse;
 import com.adamboyd.reactive.auth.restmodels.RegisterRequest;
 import com.adamboyd.reactive.auth.restmodels.Role;
+import com.adamboyd.reactive.auth.utils.AuthValidator;
 import com.adamboyd.reactive.models.businessobjects.UserDetailsBO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.ws.rs.BadRequestException;
 import java.math.BigDecimal;
 
 @Slf4j
@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserDetailsRepository userDetailsRepository;
+    private final AuthValidator authValidator;
 
     public Mono<User> getUserByUsername(String username) {
         return userDetailsRepository.findByUsername(username)
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<AuthenticationResponse> createUser(RegisterRequest registerRequest) {
         return Mono.just(registerRequest)
-                .filterWhen(this::newUserCredentialsAreValid)
+                .filterWhen(authValidator::newUserCredentialsAreValid)
                 .flatMap(regReq -> userDetailsRepository.save(
                         UserDetailsBO.builder()
                                 .id(null)
@@ -82,27 +83,5 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    public Mono<Boolean> newUserCredentialsAreValid(RegisterRequest registerRequest) {
-        Mono<Boolean> isValidUsername = userDetailsRepository.existsByUsername(registerRequest.getUsername())
-                .map(aBoolean -> {
-                    if (Boolean.TRUE.equals(aBoolean)) {
-                        Mono.error(new BadRequestException("Email already in use."));
-                    } else {
-                        log.info("Passed email validation for create request.");
-                    }
-                    return !aBoolean;
-                });
 
-        Mono<Boolean> isValidEmail = userDetailsRepository.existsByEmail(registerRequest.getEmail())
-                .map(aBoolean -> {
-                    if (Boolean.TRUE.equals(aBoolean)) {
-                        Mono.error(new BadRequestException("Username already in use."));
-                    } else {
-                        log.info("Passed username validation for create request.");
-                    }
-                    return !aBoolean;
-                });
-
-        return Mono.zip(isValidEmail, isValidUsername, (f, s) -> f && s);
-    }
 }

@@ -3,12 +3,11 @@ package com.adamboyd.reactive.auth.services;
 import com.adamboyd.reactive.auth.repositories.UserDetailsRepository;
 import com.adamboyd.reactive.auth.restmodels.AuthenticationResponse;
 import com.adamboyd.reactive.auth.restmodels.RegisterRequest;
+import com.adamboyd.reactive.auth.utils.AuthValidator;
 import com.adamboyd.reactive.models.businessobjects.UserDetailsBO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -34,15 +33,11 @@ class UserServiceImplTest {
     private UserDetailsRepository userDetailsRepository;
     @Mock
     private PasswordEncoder encoder;
+
+    @Mock
+    private AuthValidator authValidator;
     @InjectMocks
     private UserServiceImpl serviceUnderTest;
-
-    private static Stream<Arguments> invalidRegisterRequestArgs() {
-        return Stream.of(
-                Arguments.of(Mono.just(true), Mono.just(false), "Email already in use."),
-                Arguments.of(Mono.just(false), Mono.just(true), "Username already in use.")
-        );
-    }
 
     @Test
     void getUserByUsername() {
@@ -118,7 +113,7 @@ class UserServiceImplTest {
     void getUserByEmail_whenSearchingByEmail_andRecordAbsent_returnEmptyMono() {
         final String email = "test";
 
-        when(userDetailsRepository.findById(any(BigDecimal.class)))
+        when(userDetailsRepository.findByEmail(any(String.class)))
                 .thenReturn(Mono.empty());
 
         serviceUnderTest.getUserByEmail(email)
@@ -127,7 +122,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void createUserDetails_whenUserCredentialsAreValid_returnUserDetailsBO() {
+    void createUserDetails_whenUserCredentialsAreValid_returnAuthenticationResponse() {
         final RegisterRequest registerRequest = new RegisterRequest("test@gmail.com", "test", "test123", "testFirstName", "testLastName");
         final UserDetailsBO userDetailsBO = getUserDetailsBO(1, "test@gmail.com", "test", "test123", ADMIN);
 
@@ -135,8 +130,7 @@ class UserServiceImplTest {
                 .thenReturn(Mono.just(userDetailsBO));
         when(encoder.encode(any(String.class))).thenReturn("324732547q354354375");
 
-        when(userDetailsRepository.existsByUsername(any(String.class))).thenReturn(Mono.just(Boolean.FALSE));
-        when(userDetailsRepository.existsByEmail(any(String.class))).thenReturn(Mono.just(Boolean.FALSE));
+        when(authValidator.newUserCredentialsAreValid(any(RegisterRequest.class))).thenReturn(Mono.just(Boolean.TRUE));
 
         serviceUnderTest.createUser(registerRequest)
                 .as(StepVerifier::create)
@@ -146,23 +140,20 @@ class UserServiceImplTest {
                 .verifyComplete();
     }
 
-    @ParameterizedTest
-    @MethodSource("invalidRegisterRequestArgs")
-    void createUserDetails_whenUserCredentialsAreValid_returnError(Mono<Boolean> isValidUsername, Mono<Boolean> isValidEmail, String errorMessage) {
+    @Test
+    void createUserDetails_whenUserCredentialsAreInvalid_throwError() {
+        final String errorMessage = "Email already in use.";
         final RegisterRequest registerRequest = new RegisterRequest("test@gmail.com", "test", "test123", "testFirstName", "testLastName");
-        final UserDetailsBO userDetailsBO = getUserDetailsBO(1, "test@gmail.com", "test", "encodedTest123", ADMIN);
 
-        when(userDetailsRepository.save(any(UserDetailsBO.class)))
-                .thenReturn(Mono.just(userDetailsBO));
-        when(encoder.encode(any(String.class))).thenReturn("encodedTest123");
-        when(userDetailsRepository.existsByUsername(any(String.class))).thenReturn(isValidUsername);
-        when(userDetailsRepository.existsByEmail(any(String.class))).thenReturn(isValidEmail);
+        when(authValidator.newUserCredentialsAreValid(any(RegisterRequest.class)))
+                .thenReturn(Mono.error(new BadRequestException(errorMessage)));
 
         serviceUnderTest.createUser(registerRequest)
                 .as(StepVerifier::create)
                 .expectErrorMatches(throwable -> throwable instanceof BadRequestException &&
-                        throwable.getMessage().equals(errorMessage))
-                .verify();
+                        throwable.getMessage().equals(errorMessage)
+                )
+                .verifyLater();
     }
 
     @Test
