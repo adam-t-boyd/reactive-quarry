@@ -1,4 +1,4 @@
-package com.adamboyd.reactive.auth.repositories;
+package com.adamboyd.reactive.authService.repositories;
 
 import com.adamboyd.reactive.models.businessobjects.UserDetailsBO;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;

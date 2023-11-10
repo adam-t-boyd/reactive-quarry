@@ -1,4 +1,4 @@
-package com.adamboyd.reactive.auth.restmodels;
+package com.adamboyd.reactive.authService.restmodels;
 
 
 import lombok.Builder;
@@ -32,6 +32,6 @@ public class RegisterRequest {
         this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
-        List.of(new SimpleGrantedAuthority(Role.ADMIN.getName()));
+//        List.of(new SimpleGrantedAuthority(Role.ADMIN.getName()));
     }
 }

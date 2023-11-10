@@ -1,7 +1,7 @@
-package com.adamboyd.reactive.auth.utils;
+package com.adamboyd.reactive.authService.utils;
 
-import com.adamboyd.reactive.auth.services.JwtService;
-import com.adamboyd.reactive.auth.services.UserServiceImpl;
+import com.adamboyd.reactive.authService.services.JwtService;
+import com.adamboyd.reactive.authService.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;

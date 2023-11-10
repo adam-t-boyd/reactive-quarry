@@ -1,7 +1,7 @@
-package com.adamboyd.reactive.auth.utils;
+package com.adamboyd.reactive.authService.utils;
 
-import com.adamboyd.reactive.auth.repositories.UserDetailsRepository;
-import com.adamboyd.reactive.auth.restmodels.RegisterRequest;
+import com.adamboyd.reactive.authService.repositories.UserDetailsRepository;
+import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

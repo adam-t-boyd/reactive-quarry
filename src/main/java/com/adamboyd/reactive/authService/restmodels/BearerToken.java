@@ -1,4 +1,4 @@
-package com.adamboyd.reactive.auth.restmodels;
+package com.adamboyd.reactive.authService.restmodels;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;

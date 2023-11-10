@@ -1,6 +1,6 @@
-package com.adamboyd.reactive.auth.repositories;
+package com.adamboyd.reactive.authService.repositories;
 
-import com.adamboyd.reactive.auth.restmodels.Role;
+import com.adamboyd.reactive.authService.restmodels.Role;
 import com.adamboyd.reactive.models.businessobjects.UserDetailsBO;
 
 public class UserData {

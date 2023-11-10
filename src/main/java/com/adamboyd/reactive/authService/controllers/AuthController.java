@@ -1,13 +1,12 @@
-package com.adamboyd.reactive.auth.controllers;
+package com.adamboyd.reactive.authService.controllers;
 
-import com.adamboyd.reactive.auth.restmodels.AuthenticationRequest;
-import com.adamboyd.reactive.auth.restmodels.AuthenticationResponse;
-import com.adamboyd.reactive.auth.restmodels.RegisterRequest;
-import com.adamboyd.reactive.auth.services.JwtService;
-import com.adamboyd.reactive.auth.services.UserServiceImpl;
+import com.adamboyd.reactive.authService.restmodels.AuthenticationRequest;
+import com.adamboyd.reactive.authService.restmodels.AuthenticationResponse;
+import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
+import com.adamboyd.reactive.authService.services.JwtService;
+import com.adamboyd.reactive.authService.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -22,7 +21,6 @@ public class AuthController {
 
     private final UserServiceImpl userDetailsService;
     private final JwtService jwtService;
-    private final PasswordEncoder encoder;
 
     @PostMapping("/login")
     public Mono<ResponseEntity<String>> login(@RequestBody AuthenticationRequest authenticationRequest) {
@@ -67,4 +65,5 @@ public class AuthController {
     public Mono<ResponseEntity<String>> auth() {
         return Mono.just(ResponseEntity.ok().body("Auth worked!"));
     }
+
 }

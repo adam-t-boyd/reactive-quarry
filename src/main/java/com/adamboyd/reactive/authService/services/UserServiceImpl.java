@@ -1,10 +1,10 @@
-package com.adamboyd.reactive.auth.services;
+package com.adamboyd.reactive.authService.services;
 
-import com.adamboyd.reactive.auth.repositories.UserDetailsRepository;
-import com.adamboyd.reactive.auth.restmodels.AuthenticationResponse;
-import com.adamboyd.reactive.auth.restmodels.RegisterRequest;
-import com.adamboyd.reactive.auth.restmodels.Role;
-import com.adamboyd.reactive.auth.utils.AuthValidator;
+import com.adamboyd.reactive.authService.repositories.UserDetailsRepository;
+import com.adamboyd.reactive.authService.restmodels.AuthenticationResponse;
+import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
+import com.adamboyd.reactive.authService.restmodels.Role;
+import com.adamboyd.reactive.authService.utils.AuthValidator;
 import com.adamboyd.reactive.models.businessobjects.UserDetailsBO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,12 +75,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Mono<User> updateUser(BigDecimal userId, RegisterRequest updateRequest) {
-        return null;
+        return userDetailsRepository.existsById(userId)
+                .filterWhen(aBoolean -> Mono.just(Boolean.TRUE))
+                .flatMap(regReq -> userDetailsRepository.save(
+                UserDetailsBO.builder()
+                    .id(null)
+                    .email(updateRequest.getEmail())
+                    .username(updateRequest.getUsername())
+                    .password(encoder.encode(updateRequest.getPassword()))
+                    .role(Role.ADMIN)
+                    .firstname(updateRequest.getFirstname())
+                    .lastname(updateRequest.getLastname())
+                    .build()))
+                .map(userDetailsBO -> new User(userDetailsBO.getUsername(),
+                        userDetailsBO.getPassword(),
+                        userDetailsBO.getAuthorities()));
     }
 
     @Override
-    public Mono<Void> deleteUser(BigDecimal userId) {
-        return null;
+    public Mono<Void> deleteUser(BigDecimal userId, RegisterRequest deleteRequest) {
+        return userDetailsRepository.existsById(userId)
+                .filterWhen(aBoolean -> Mono.just(Boolean.TRUE))
+                .flatMap(regReq -> userDetailsRepository.save(
+                        UserDetailsBO.builder()
+                                .id(null)
+                                .email(deleteRequest.getEmail())
+                                .username(deleteRequest.getUsername())
+                                .password(encoder.encode(deleteRequest.getPassword()))
+                                .role(Role.ADMIN)
+                                .firstname(deleteRequest.getFirstname())
+                                .lastname(deleteRequest.getLastname())
+                                .build()))
+                .flatMap(userDetailsBO -> Mono.empty());
     }
 
 

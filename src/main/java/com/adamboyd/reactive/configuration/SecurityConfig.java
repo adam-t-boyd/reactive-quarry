@@ -1,7 +1,7 @@
 package com.adamboyd.reactive.configuration;
 
-import com.adamboyd.reactive.auth.utils.AuthConverter;
-import com.adamboyd.reactive.auth.utils.AuthManager;
+import com.adamboyd.reactive.authService.utils.AuthConverter;
+import com.adamboyd.reactive.authService.utils.AuthManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

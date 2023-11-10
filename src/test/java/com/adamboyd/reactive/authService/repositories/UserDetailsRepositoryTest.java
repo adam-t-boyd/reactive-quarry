@@ -1,4 +1,4 @@
-package com.adamboyd.reactive.auth.repositories;
+package com.adamboyd.reactive.authService.repositories;
 
 import com.adamboyd.reactive.models.businessobjects.UserDetailsBO;
 import org.junit.jupiter.api.Test;
@@ -8,9 +8,9 @@ import reactor.test.StepVerifier;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.adamboyd.reactive.auth.repositories.UserData.getUserDetailsBO;
-import static com.adamboyd.reactive.auth.restmodels.Role.ADMIN;
-import static com.adamboyd.reactive.auth.restmodels.Role.USER;
+import static com.adamboyd.reactive.authService.repositories.UserData.getUserDetailsBO;
+import static com.adamboyd.reactive.authService.restmodels.Role.ADMIN;
+import static com.adamboyd.reactive.authService.restmodels.Role.USER;
 
 class UserDetailsRepositoryTest {
     @InjectMocks

@@ -1,13 +1,12 @@
-package com.adamboyd.reactive.auth.services;
+package com.adamboyd.reactive.authService.services;
 
-import com.adamboyd.reactive.auth.repositories.UserDetailsRepository;
-import com.adamboyd.reactive.auth.restmodels.AuthenticationResponse;
-import com.adamboyd.reactive.auth.restmodels.RegisterRequest;
-import com.adamboyd.reactive.auth.utils.AuthValidator;
+import com.adamboyd.reactive.authService.repositories.UserDetailsRepository;
+import com.adamboyd.reactive.authService.restmodels.AuthenticationResponse;
+import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
+import com.adamboyd.reactive.authService.utils.AuthValidator;
 import com.adamboyd.reactive.models.businessobjects.UserDetailsBO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.provider.Arguments;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,10 +18,9 @@ import reactor.test.StepVerifier;
 
 import javax.ws.rs.BadRequestException;
 import java.math.BigDecimal;
-import java.util.stream.Stream;
 
-import static com.adamboyd.reactive.auth.repositories.UserData.getUserDetailsBO;
-import static com.adamboyd.reactive.auth.restmodels.Role.ADMIN;
+import static com.adamboyd.reactive.authService.repositories.UserData.getUserDetailsBO;
+import static com.adamboyd.reactive.authService.restmodels.Role.ADMIN;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 

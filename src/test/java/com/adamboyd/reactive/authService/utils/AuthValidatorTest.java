@@ -1,7 +1,7 @@
-package com.adamboyd.reactive.auth.utils;
+package com.adamboyd.reactive.authService.utils;
 
-import com.adamboyd.reactive.auth.repositories.UserDetailsRepository;
-import com.adamboyd.reactive.auth.restmodels.RegisterRequest;
+import com.adamboyd.reactive.authService.repositories.UserDetailsRepository;
+import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;

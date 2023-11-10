@@ -1,7 +1,7 @@
-package com.adamboyd.reactive.auth.services;
+package com.adamboyd.reactive.authService.services;
 
-import com.adamboyd.reactive.auth.restmodels.AuthenticationResponse;
-import com.adamboyd.reactive.auth.restmodels.RegisterRequest;
+import com.adamboyd.reactive.authService.restmodels.AuthenticationResponse;
+import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
 import org.springframework.security.core.userdetails.User;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,6 +20,6 @@ public interface UserService {
 
     Mono<User> updateUser(BigDecimal userId, RegisterRequest user);
 
-    Mono<Void> deleteUser(BigDecimal userId);
+    Mono<Void> deleteUser(BigDecimal userId, RegisterRequest user);
 
 }

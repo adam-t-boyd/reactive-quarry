@@ -1,4 +1,4 @@
-package com.adamboyd.reactive.auth.services;
+package com.adamboyd.reactive.authService.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
