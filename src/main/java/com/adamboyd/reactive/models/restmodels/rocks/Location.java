@@ -8,9 +8,9 @@ import java.math.BigDecimal;
 @Builder
 @Data
 public class Location {
-    final BigDecimal latitude;
-    final BigDecimal longitude;
-    final String address;
-    final Country country;
-    final String googleAPIPlaceId;
+     BigDecimal latitude;
+     BigDecimal longitude;
+     String address;
+     Country country;
+     String googleAPIPlaceId;
 }

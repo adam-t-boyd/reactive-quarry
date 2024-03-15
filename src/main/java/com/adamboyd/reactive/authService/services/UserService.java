@@ -2,7 +2,7 @@ package com.adamboyd.reactive.authService.services;
 
 import com.adamboyd.reactive.authService.restmodels.AuthenticationResponse;
 import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
-import org.springframework.security.core.userdetails.User;
+import com.adamboyd.reactive.authService.restmodels.UserDTO;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -10,15 +10,15 @@ import java.math.BigDecimal;
 
 public interface UserService {
 
-    Mono<User> getUserByUsername(String username);
+    Mono<UserDTO> getUserByUsername(String username);
 
-    Flux<User> getUser();
+    Flux<UserDTO> getUser();
 
-    Mono<User> getUser(BigDecimal userId);
+    Mono<UserDTO> getUser(BigDecimal userId);
 
     Mono<AuthenticationResponse> createUser(RegisterRequest user);
 
-    Mono<User> updateUser(BigDecimal userId, RegisterRequest user);
+    Mono<UserDTO> updateUser(BigDecimal userId, RegisterRequest user);
 
     Mono<Void> deleteUser(BigDecimal userId, RegisterRequest user);
 

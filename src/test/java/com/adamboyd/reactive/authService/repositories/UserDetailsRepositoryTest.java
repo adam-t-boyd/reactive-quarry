@@ -19,7 +19,7 @@ class UserDetailsRepositoryTest {
     @Test
     void findByEmail() {
         insertUserDetailsBOs();
-        userDetailsRepository.findByEmail("test@gmail.com")
+        userDetailsRepository.findOneByEmail("test@gmail.com")
                 .as(StepVerifier::create)
                 .expectNextCount(1)
                 .verifyComplete();

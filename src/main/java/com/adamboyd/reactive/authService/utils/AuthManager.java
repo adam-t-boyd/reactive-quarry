@@ -1,18 +1,17 @@
 package com.adamboyd.reactive.authService.utils;
 
-import com.adamboyd.reactive.authService.services.JwtService;
-import com.adamboyd.reactive.authService.services.UserServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
+/*
 @RequiredArgsConstructor
+*/
 public class AuthManager implements ReactiveAuthenticationManager {
-    private final JwtService jwtService;
-    private final UserServiceImpl users;
+    // @NonNull private final JwtService jwtService;
+    // @NonNull private final UserServiceImpl userService;
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {

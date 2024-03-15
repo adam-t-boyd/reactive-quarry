@@ -1,10 +1,7 @@
 package com.adamboyd.reactive.models.businessobjects;
 
 import com.adamboyd.reactive.authService.restmodels.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -17,10 +14,9 @@ import java.util.List;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "user_details")
 public class UserDetailsBO implements UserDetails {
+    @Getter
     @Id
     private Integer id;
 
@@ -40,6 +36,11 @@ public class UserDetailsBO implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override

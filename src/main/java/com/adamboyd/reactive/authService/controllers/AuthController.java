@@ -5,6 +5,7 @@ import com.adamboyd.reactive.authService.restmodels.AuthenticationResponse;
 import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
 import com.adamboyd.reactive.authService.services.JwtService;
 import com.adamboyd.reactive.authService.services.UserServiceImpl;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,9 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @RequiredArgsConstructor
 public class AuthController {
 
+    @NonNull
     private final UserServiceImpl userDetailsService;
+    @NonNull
     private final JwtService jwtService;
 
     @PostMapping("/login")
@@ -36,7 +39,7 @@ public class AuthController {
                     }
 //                    if (encoder.matches(authenticationRequest.getPassword(), optionalUser.get().getPassword())) {
                     if (authenticationRequest.getPassword().equals(optionalUser.get().getPassword())) {
-                        return Mono.just(ResponseEntity.ok().body(jwtService.generateToken(optionalUser.get())));
+                        return Mono.just(ResponseEntity.ok().body(jwtService.generateToken(optionalUser.get().getUsername())));
                     }
                     return Mono.just(ResponseEntity.status(UNAUTHORIZED).body("Invalid Credentials."));
                 });
@@ -48,14 +51,7 @@ public class AuthController {
     @PostMapping("/register")
     public Mono<ResponseEntity<String>> register(
             @RequestBody RegisterRequest registerRequest) {
-        final Mono<AuthenticationResponse> userDetails = userDetailsService.createUser(
-                new RegisterRequest(
-                        registerRequest.getEmail(),
-                        registerRequest.getUsername(),
-                        registerRequest.getPassword(),
-                        registerRequest.getFirstname(),
-                        registerRequest.getLastname()
-                ));
+        final Mono<AuthenticationResponse> userDetails = userDetailsService.createUser(registerRequest);
 
         return userDetails.map(AuthenticationResponse::getToken)
                 .map(s -> ResponseEntity.ok().body(String.format("Welcome! Here's your JWT token %s", s)));

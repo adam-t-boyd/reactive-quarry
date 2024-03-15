@@ -1,10 +1,10 @@
 package com.adamboyd.reactive.userService;
 
 import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
+import com.adamboyd.reactive.authService.restmodels.UserDTO;
 import com.adamboyd.reactive.authService.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -22,7 +22,7 @@ public class UserController {
     private final UserServiceImpl userDetailsService;
 
     @PutMapping("/{userId}")
-    public Mono<ResponseEntity<User>> updateUser(
+    public Mono<ResponseEntity<UserDTO>> updateUser(
             @PathVariable BigDecimal userId,
             @RequestBody RegisterRequest updateRequest) {
         return userDetailsService
