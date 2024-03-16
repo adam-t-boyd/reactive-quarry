@@ -35,13 +35,14 @@ class SecurityConfig {
                                                             AuthConverter jwtAuthConverter,
                                                             AuthManager jwtAuthManager) {
         final AuthenticationWebFilter jwtFilter = new AuthenticationWebFilter(jwtAuthManager);
-        jwtFilter.setServerAuthenticationConverter(jwtAuthConverter);
+//        jwtFilter.setServerAuthenticationConverter(jwtAuthConverter);
         return http
                 .authorizeExchange(auth -> {
+                    auth.pathMatchers("/v3/api-docs").permitAll();
                     auth.pathMatchers("/auth/**").permitAll();
                     auth.anyExchange().authenticated();
                 })
-                .addFilterBefore(jwtFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+//                .addFilterBefore(jwtFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
