@@ -26,6 +26,7 @@ class DatabaseConfig extends AbstractR2dbcConfiguration {
     /** Configuration of version history (Flyway)
      * @param flywayProperties from spring.flyway
      * @param r2dbcProperties from spring.r2dbc
+     * @return Flyway bean
      * **/
     @Bean(initMethod = "migrate")
     public Flyway flyway(FlywayProperties flywayProperties, R2dbcProperties r2dbcProperties) {
@@ -42,7 +43,8 @@ class DatabaseConfig extends AbstractR2dbcConfiguration {
                 .load();
     }
 
-    /** Configuration of Database (Postgres) **/
+    /** Configuration of Database (Postgres)
+     * @return Postgres Connection Factory Bean **/
    @Override
     public ConnectionFactory connectionFactory() {
         return new PostgresqlConnectionFactory(PostgresqlConnectionConfiguration.builder()
