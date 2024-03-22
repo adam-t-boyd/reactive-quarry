@@ -1,6 +1,6 @@
 package com.adamboyd.reactive.repositories;
 
-import com.adamboyd.reactive.models.businessobjects.QuarryBO;
+import com.adamboyd.reactive.quarryService.models.businessobjects.QuarryBO;
 
 import java.time.LocalDateTime;
 

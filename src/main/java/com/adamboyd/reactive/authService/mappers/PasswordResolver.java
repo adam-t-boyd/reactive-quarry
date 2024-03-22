@@ -13,6 +13,4 @@ public class PasswordResolver {
     public String encodePassword(String rawPassword) {
         return passwordEncoder.encode(rawPassword);
     }
-
-
 }

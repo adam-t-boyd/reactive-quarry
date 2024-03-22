@@ -7,7 +7,7 @@ import com.adamboyd.reactive.authService.restmodels.AuthenticationResponse;
 import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
 import com.adamboyd.reactive.authService.restmodels.UserDTO;
 import com.adamboyd.reactive.authService.utils.AuthValidator;
-import com.adamboyd.reactive.models.businessobjects.UserDetailsBO;
+import com.adamboyd.reactive.quarryService.models.businessobjects.UserDetailsBO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

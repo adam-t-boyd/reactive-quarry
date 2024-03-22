@@ -1,17 +1,16 @@
 package com.adamboyd.reactive.authService.controllers;
 
-import com.adamboyd.reactive.authService.mappers.PasswordResolver;
 import com.adamboyd.reactive.authService.restmodels.AuthenticationRequest;
 import com.adamboyd.reactive.authService.restmodels.AuthenticationResponse;
 import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
 import com.adamboyd.reactive.authService.restmodels.UserDTO;
 import com.adamboyd.reactive.authService.services.JwtService;
 import com.adamboyd.reactive.authService.services.UserServiceImpl;
-import com.adamboyd.reactive.models.businessobjects.UserDetailsBO;
+import com.adamboyd.reactive.quarryService.models.businessobjects.UserDetailsBO;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -28,6 +27,7 @@ public class AuthController {
     @NonNull private final UserServiceImpl userDetailsService;
     @NonNull private final JwtService jwtService;
     @NonNull private final PasswordEncoder passwordEncoder;
+    private static final String WELCOME_TOKEN_MSG = "Welcome! Here's your JWT token %s";
 
     @PostMapping("/login")
     public Mono<ResponseEntity<String>> login(@RequestBody AuthenticationRequest authenticationRequest) {
@@ -50,21 +50,25 @@ public class AuthController {
 
     // login works, but doesn't decrypt the db password. Needs to.
     // register needs to encode password to store in backend. needs to be available without token.
-    // - need to do exception handling. throw error sthat are handled by controller advice.
+    // - need to do exception handling. throw error that are handled by controller advice.
     @PostMapping("/register")
-    public Mono<ResponseEntity<String>> register(
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<String> register(
             @RequestBody RegisterRequest registerRequest) {
         final Mono<AuthenticationResponse> userDetails = userDetailsService.createUser(registerRequest);
-
-        return userDetails.map(AuthenticationResponse::getToken)
-                .map(s -> ResponseEntity.ok().body(String.format("Welcome! Here's your JWT token %s", s)));
+        return userDetails
+                .map(authenticationResponse ->
+                    String.format(WELCOME_TOKEN_MSG, authenticationResponse.getToken()));
     }
 
     @GetMapping("/authenticate")
     public Mono<ResponseEntity<String>> auth(@RequestBody AuthenticationResponse authenticationResponse) {
         // WIP
-        jwtService.isTokenValid(authenticationResponse.getToken(), UserDetailsBO.builder().build());
-        return Mono.just(ResponseEntity.ok().body("Auth worked!"));
+        boolean isTokenValid = jwtService.isTokenValid(authenticationResponse.getToken(), UserDetailsBO.builder().build());
+        if (isTokenValid) {
+            Mono.just(ResponseEntity.ok().body("Auth worked!"));
+        }
+        return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username or token."));
     }
 
 }

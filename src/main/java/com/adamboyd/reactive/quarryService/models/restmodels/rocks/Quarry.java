@@ -1,4 +1,4 @@
-package com.adamboyd.reactive.models.restmodels.rocks;
+package com.adamboyd.reactive.quarryService.models.restmodels.rocks;
 
 import lombok.Builder;
 

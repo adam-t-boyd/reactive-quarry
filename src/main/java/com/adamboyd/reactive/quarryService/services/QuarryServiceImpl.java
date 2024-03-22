@@ -1,9 +1,9 @@
-package com.adamboyd.reactive.services.impl;
+package com.adamboyd.reactive.quarryService.services;
 
-import com.adamboyd.reactive.models.businessobjects.QuarryBO;
-import com.adamboyd.reactive.models.restmodels.rocks.Quarry;
-import com.adamboyd.reactive.repositories.QuarryRepository;
-import com.adamboyd.reactive.services.QuarryService;
+import com.adamboyd.reactive.quarryService.models.businessobjects.QuarryBO;
+import com.adamboyd.reactive.quarryService.models.restmodels.rocks.Quarry;
+import com.adamboyd.reactive.quarryService.repositories.QuarryRepository;
+import com.adamboyd.reactive.quarryService.services.QuarryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;

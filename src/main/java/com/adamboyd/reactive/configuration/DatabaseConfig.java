@@ -15,6 +15,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
+import java.util.Objects;
+
 /** Configuration of Reactive Database (Postgres) and version history (Flyway) **/
 @Configuration
 @PropertySource("classpath:/src/main/resources/application.yml")
@@ -48,8 +50,8 @@ class DatabaseConfig extends AbstractR2dbcConfiguration {
    @Override
     public ConnectionFactory connectionFactory() {
         return new PostgresqlConnectionFactory(PostgresqlConnectionConfiguration.builder()
-                .username(environment.getProperty("r2dbc.username"))
-                .password(environment.getProperty("r2dbc.password"))
+                .username(Objects.requireNonNull(environment.getProperty("r2dbc.username")))
+                .password(Objects.requireNonNull(environment.getProperty("r2dbc.password")))
                 .build());
     }
 }

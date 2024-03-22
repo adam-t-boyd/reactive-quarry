@@ -1,4 +1,4 @@
-package com.adamboyd.reactive.models.businessobjects;
+package com.adamboyd.reactive.quarryService.models.businessobjects;
 
 import com.adamboyd.reactive.authService.restmodels.Role;
 import lombok.*;

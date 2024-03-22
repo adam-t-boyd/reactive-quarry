@@ -1,6 +1,6 @@
-package com.adamboyd.reactive.services;
+package com.adamboyd.reactive.quarryService.services;
 
-import com.adamboyd.reactive.models.restmodels.rocks.Quarry;
+import com.adamboyd.reactive.quarryService.models.restmodels.rocks.Quarry;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

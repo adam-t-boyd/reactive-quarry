@@ -1,7 +1,8 @@
-package com.adamboyd.reactive.userService;
+package com.adamboyd.reactive.authService.controllers;
 
 import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
 import com.adamboyd.reactive.authService.restmodels.UserDTO;
+import com.adamboyd.reactive.authService.services.UserService;
 import com.adamboyd.reactive.authService.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

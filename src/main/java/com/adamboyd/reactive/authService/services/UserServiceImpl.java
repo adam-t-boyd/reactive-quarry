@@ -9,7 +9,7 @@ import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
 import com.adamboyd.reactive.authService.restmodels.Role;
 import com.adamboyd.reactive.authService.restmodels.UserDTO;
 import com.adamboyd.reactive.authService.utils.AuthValidator;
-import com.adamboyd.reactive.models.businessobjects.UserDetailsBO;
+import com.adamboyd.reactive.quarryService.models.businessobjects.UserDetailsBO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
