@@ -6,7 +6,7 @@ import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
 import com.adamboyd.reactive.authService.restmodels.UserDTO;
 import com.adamboyd.reactive.authService.services.JwtService;
 import com.adamboyd.reactive.authService.services.UserServiceImpl;
-import com.adamboyd.reactive.quarryService.models.businessobjects.UserDetailsBO;
+import com.adamboyd.reactive.authService.restmodels.UserDetailsBO;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

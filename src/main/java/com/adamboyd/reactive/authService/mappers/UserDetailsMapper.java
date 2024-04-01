@@ -2,7 +2,7 @@ package com.adamboyd.reactive.authService.mappers;
 
 import com.adamboyd.reactive.authService.restmodels.RegisterRequest;
 import com.adamboyd.reactive.authService.restmodels.Role;
-import com.adamboyd.reactive.quarryService.models.businessobjects.UserDetailsBO;
+import com.adamboyd.reactive.authService.restmodels.UserDetailsBO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

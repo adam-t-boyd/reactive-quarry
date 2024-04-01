@@ -2,7 +2,7 @@ package com.adamboyd.reactive.authService.mappers;
 
 import com.adamboyd.reactive.authService.restmodels.AuthenticationResponse;
 import com.adamboyd.reactive.authService.restmodels.Role;
-import com.adamboyd.reactive.quarryService.models.businessobjects.UserDetailsBO;
+import com.adamboyd.reactive.authService.restmodels.UserDetailsBO;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,6 +1,6 @@
 package com.adamboyd.reactive.authService.repositories;
 
-import com.adamboyd.reactive.quarryService.models.businessobjects.UserDetailsBO;
+import com.adamboyd.reactive.authService.restmodels.UserDetailsBO;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import reactor.test.StepVerifier;

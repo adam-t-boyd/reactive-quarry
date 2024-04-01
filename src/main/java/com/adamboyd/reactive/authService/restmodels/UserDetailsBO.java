@@ -1,6 +1,5 @@
-package com.adamboyd.reactive.quarryService.models.businessobjects;
+package com.adamboyd.reactive.authService.restmodels;
 
-import com.adamboyd.reactive.authService.restmodels.Role;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
