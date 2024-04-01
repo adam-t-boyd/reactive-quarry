@@ -13,6 +13,11 @@ import org.mapstruct.factory.Mappers;
 public interface QuarryMapper {
     QuarryMapper INSTANCE = Mappers.getMapper(QuarryMapper.class);
 
+    @Mapping(target = "id", source = "quarryId")
+    @Mapping(target = "placeid", source = "location", qualifiedByName = "toPlaceid")
+    @Mapping(target = "establisheddate", source = "establishedDate", qualifiedByName = "toLocalDateTime")
+    QuarryBO toQuarryBO(Quarry quarry);
+
     @Mapping(target = "quarryId", source = "id")
     @Mapping(target = "location", source = "placeid", qualifiedByName = "toLocation")
     @Mapping(target = "establishedDate", source = "establisheddate", qualifiedByName = "toZonedDateTime")
@@ -25,4 +30,9 @@ public interface QuarryMapper {
     @Mapping(target = "country", ignore = true)
     @Named("toLocation")
     Location toLocation(String placeId);
+
+    @Named("toPlaceid")
+    default String toPlaceId(Location location){
+        return location.getGoogleAPIPlaceId();
+    };
 }

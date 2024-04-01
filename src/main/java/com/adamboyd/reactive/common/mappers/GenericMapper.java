@@ -13,4 +13,9 @@ public class GenericMapper {
     public ZonedDateTime toZonedDateTime(LocalDateTime localDateTime) {
         return localDateTime.atZone(ZoneId.of(ZoneOffset.UTC.getId()));
     }
+
+    @Named("toLocalDateTime")
+    public LocalDateTime toLocalDateTime(ZonedDateTime zonedDateTime) {
+        return zonedDateTime.toLocalDateTime();
+    }
 }

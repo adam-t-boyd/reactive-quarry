@@ -1,10 +1,12 @@
 package com.adamboyd.reactive.quarryService.data;
 
+import com.adamboyd.reactive.quarryService.models.businessobjects.QuarryBO;
 import com.adamboyd.reactive.quarryService.models.restmodels.rocks.Country;
 import com.adamboyd.reactive.quarryService.models.restmodels.rocks.Location;
 import com.adamboyd.reactive.quarryService.models.restmodels.rocks.Quarry;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 
@@ -27,6 +29,15 @@ public class QuarryData {
                         .latitude(new BigDecimal("43.40"))
                         .longitude(new BigDecimal("44.56"))
                         .build())
+                .build();
+    }
+
+    public static QuarryBO buildQuarryBO() {
+        return QuarryBO.builder()
+                .id(1)
+                .establisheddate(LocalDateTime.now())
+                .disused(true)
+                .placeid("ChIJjXZ3fz4xekgRo7J5mSHTQ_8")
                 .build();
     }
 }

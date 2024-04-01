@@ -38,13 +38,12 @@ class UserServiceImplTest {
     private AuthValidator authValidator;
     @InjectMocks
     private UserServiceImpl serviceUnderTest;
+    private static final UserDetailsBO userDetailsBO = getUserDetailsBO(1, "test@gmail.com", "test", "test123", ADMIN);
+    private static final UserDTO userDTO = UserDTOMapper.INSTANCE.toUserDTO(userDetailsBO);
 
     @Test
     void getUserByUsername() {
         final String username = "test";
-        final UserDetailsBO userDetailsBO = getUserDetailsBO(1, "test@gmail.com", "test", "test123", ADMIN);
-
-        UserDTO userDTO = UserDTOMapper.INSTANCE.toUserDTO(userDetailsBO);
 
         when(userDetailsRepository.findByUsername(any(String.class)))
                 .thenReturn(Mono.just(userDetailsBO));
@@ -57,9 +56,6 @@ class UserServiceImplTest {
 
     @Test
     void getUser_returnUsers() {
-        final UserDetailsBO userDetailsBO = getUserDetailsBO(1, "test@gmail.com", "test", "test123", ADMIN);
-        UserDTO userDTO = UserDTOMapper.INSTANCE.toUserDTO(userDetailsBO);
-
         when(userDetailsRepository.findAll()).thenReturn(Flux.just(userDetailsBO));
 
         serviceUnderTest.getUser()
@@ -71,8 +67,6 @@ class UserServiceImplTest {
     @Test
     void getUser_whenSearchingByUserId_andRecordPresent_returnUser() {
         final BigDecimal userId = BigDecimal.ONE;
-        final UserDetailsBO userDetailsBO = getUserDetailsBO(1, "test@gmail.com", "test", "test123", ADMIN);
-        UserDTO userDTO = UserDTOMapper.INSTANCE.toUserDTO(userDetailsBO);
 
         when(userDetailsRepository.findById(any(BigDecimal.class)))
                 .thenReturn(Mono.just(userDetailsBO));
@@ -98,8 +92,6 @@ class UserServiceImplTest {
     @Test
     void getUserByEmail_whenSearchingByEmail_andRecordPresent_returnUserMono() {
         final String email = "test";
-        final UserDetailsBO userDetailsBO = getUserDetailsBO(1, "test@gmail.com", "test", "test123", ADMIN);
-        UserDTO userDTO = UserDTOMapper.INSTANCE.toUserDTO(userDetailsBO);
 
         when(userDetailsRepository.findOneByEmail(any(String.class)))
                 .thenReturn(Mono.just(userDetailsBO));
@@ -125,7 +117,6 @@ class UserServiceImplTest {
     @Test
     void createUserDetails_whenUserCredentialsAreValid_returnAuthenticationResponse() {
         final RegisterRequest registerRequest = new RegisterRequest("test@gmail.com", "test", "test123", "testFirstName", "testLastName");
-        final UserDetailsBO userDetailsBO = getUserDetailsBO(1, "test@gmail.com", "test", "test123", ADMIN);
         AuthenticationResponse authenticationResponse = AuthenticationResponseMapper.INSTANCE.toAuthenticationResponse(userDetailsBO);
 
        when(userDetailsRepository.save(any(UserDetailsBO.class)))

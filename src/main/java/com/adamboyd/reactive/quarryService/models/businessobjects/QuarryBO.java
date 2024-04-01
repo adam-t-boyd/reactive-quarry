@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class QuarryBO {
     @Id
     private Integer id;
-    private Integer placeid;
+    private String placeid;
     private Boolean disused;
     private LocalDateTime establisheddate;
 }
