@@ -16,6 +16,6 @@ public class SwaggerConfiguration {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info().title("Adam Boyd's Reactive Java Application"))
-                .specVersion(SpecVersion.valueOf("1.0"));
+                .specVersion(SpecVersion.V30);
     }
 }

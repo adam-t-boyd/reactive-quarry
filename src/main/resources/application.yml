@@ -1,25 +1,27 @@
+database.port: ${DATABASE_PORT}
+
 spring:
   r2dbc:
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
-    url: r2dbc:postgresql://localhost:${DATABASE_PORT}/postgres
+    url: r2dbc:postgresql://localhost:${database.port}/postgres
   flyway:
-    url: jdbc:postgresql://localhost:${DATABASE_PORT}/postgres
+    url: jdbc:postgresql://localhost:${database.port}/postgres
     locations: classpath:db/postgres/migration
   webflux:
     base-path: /api/v1
   security:
     user:
-      roles: manager
+      roles: { USER_ROLE }
       name: {USER_NAME}
       password: {USER_PASSWORD}
 
 springdoc:
   swagger-ui:
     enabled: true
-#    path: v1/reactive/swagger-ui.html
+#    path: reactive/swagger-ui.html
 #  api-docs:
-#    path: /v1/reactive-docs
+#    path: /reactive-docs
 
-#server:
-#  port: {APPLICATION_PORT}
+server:
+  port: { APPLICATION_PORT }
