@@ -16,12 +16,12 @@ spring:
       name: {USER_NAME}
       password: {USER_PASSWORD}
 
-springdoc:
+spring-doc:
   swagger-ui:
     enabled: true
-#    path: reactive/swagger-ui.html
-#  api-docs:
-#    path: /reactive-docs
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
 
 server:
   port: { APPLICATION_PORT }
