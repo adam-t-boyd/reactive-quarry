@@ -20,6 +20,8 @@ spring-doc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
+    operationsSorter: alpha
+    tagsSorter: alpha
   api-docs:
     path: /v3/api-docs
 
