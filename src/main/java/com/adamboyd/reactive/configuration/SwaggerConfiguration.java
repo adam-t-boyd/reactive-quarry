@@ -15,7 +15,7 @@ public class SwaggerConfiguration {
 
     /**
      * Alphabetically sorts the schemas
-     **/
+     */
     @Bean
     public OpenApiCustomizer sortTagsAlphabetically() {
         return openApi -> {

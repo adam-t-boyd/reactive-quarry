@@ -14,15 +14,14 @@ import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
 import java.util.Optional;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestController
 @RequestMapping("/auth")
@@ -45,23 +44,23 @@ public class AuthController {
                     " please register via POST '/register' API.",
                     content = @Content)})
     @PostMapping("/login")
-    public Mono<ResponseEntity<String>> login(@RequestBody AuthenticationRequest authenticationRequest) {
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<String> login(@RequestBody AuthenticationRequest authenticationRequest) {
         Mono<UserDTO> userByEmail = userDetailsService.getUserByEmail(authenticationRequest.getEmail());
         return userByEmail
                 .map(Optional::ofNullable)
-//                .defaultIfEmpty(Optional.empty())
                 .flatMap(optionalUser -> {
                     if (optionalUser.isEmpty()) {
-                        return Mono.just(ResponseEntity.status(NOT_FOUND)
-                                .body(String.format("No user found with email %s, please register" +
+                        throw new NotFoundException(String.format("No user found with email %s, please register" +
                                                 " via POST '/register' API.",
-                                        authenticationRequest.getEmail())));
+                                authenticationRequest.getEmail()));
+                    } else if (passwordEncoder.matches(
+                            authenticationRequest.getPassword(), optionalUser.get().getPassword())) {
+                        return Mono.just(jwtService.generateToken(optionalUser.get().getUsername()));
                     }
-                   else if (passwordEncoder.matches(authenticationRequest.getPassword(), optionalUser.get().getPassword())) {
-                        return Mono.just(ResponseEntity.ok().body(jwtService.generateToken(optionalUser.get().getUsername())));
-                    }
-                    return Mono.just(ResponseEntity.status(UNAUTHORIZED).body("Invalid credentials."));
-                });
+                    throw new UsernameNotFoundException("Invalid credentials.");
+                })
+                .onErrorResume(Mono::error);
     }
 
     // login works, but doesn't decrypt the db password. Needs to.
@@ -95,14 +94,17 @@ public class AuthController {
             @ApiResponse(responseCode = "400", description = "Invalid username or token.",
                     content = @Content)})
     @GetMapping("/authenticate")
-    public Mono<ResponseEntity<String>> auth(@RequestBody(description = "Authentication details of user.", required = true,
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<String> authenticateUser(
+            @RequestBody(description = "Authentication details of user.", required = true,
             content = @Content(schema = @Schema(implementation = AuthenticationResponse.class)))
                                              @Valid AuthenticationResponse authenticationResponse) {
         // WIP
-        boolean isTokenValid = jwtService.isTokenValid(authenticationResponse.getToken(), UserDetailsBO.builder().build());
+        boolean isTokenValid = jwtService.isTokenValid(authenticationResponse.getToken(),
+                UserDetailsBO.builder().build());
         if (isTokenValid) {
-            Mono.just(ResponseEntity.ok().body("JWT authentication worked!"));
+            Mono.just("JWT authentication worked!");
         }
-        return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username or token."));
+        throw new BadRequestException("Invalid username or token.");
     }
 }
