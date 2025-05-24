@@ -14,7 +14,7 @@ class UserDTOMapperTest {
     void toUserDTO() {
         UserDetailsBO userDetailsBO = UserDetailsBO.builder().role(Role.ADMIN).password("password").build();
 
-        UserDTO underTest = UserDTOMapper.INSTANCE.toUserDTO(userDetailsBO);
+        UserDTO underTest = UserDTOMapper.INSTANCE.toUserDtoWithoutPassword(userDetailsBO);
 
         assertNotNull(underTest);
         assertEquals("*****", underTest.getPassword());

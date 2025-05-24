@@ -11,6 +11,6 @@ import org.mapstruct.factory.Mappers;
 public interface AuthenticationResponseMapper {
     AuthenticationResponseMapper INSTANCE = Mappers.getMapper(AuthenticationResponseMapper.class);
 
-    AuthenticationResponse toAuthenticationResponse(UserDetailsBO userDetailsBO);
+    AuthenticationResponse toAuthenticationResponse(UserDetailsBO userDetailsBO, String message);
 
 }

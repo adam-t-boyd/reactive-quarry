@@ -15,27 +15,26 @@ import javax.ws.rs.BadRequestException;
 public class AuthValidator {
     private final UserDetailsRepository userDetailsRepository;
 
-    public Mono<Boolean> newUserCredentialsAreValid(RegisterRequest registerRequest) {
-        Mono<Boolean> isValidEmail = userDetailsRepository.existsByEmail(registerRequest.getUsername())
-                .map(aBoolean -> {
-                    if (Boolean.TRUE.equals(aBoolean)) {
-                        Mono.error(new BadRequestException("Email already in use."));
-                    } else {
-                        log.info("Passed email validation for create request.");
+    public Mono<Boolean> newUserCredentialsAreValid(final RegisterRequest registerRequest) {
+        final Mono<Boolean> isValidEmail = userDetailsRepository.existsByEmail(registerRequest.getEmail())
+                .flatMap(exists -> {
+                    if (exists) {
+                        return Mono.error(new BadRequestException("Email already in use."));
                     }
-                    return !aBoolean;
+                    log.info("{} passed email validation for create request.", registerRequest.getEmail());
+                    return Mono.just(true);
                 });
 
-        Mono<Boolean> isValidUsername = userDetailsRepository.existsByUsername(registerRequest.getEmail())
-                .map(aBoolean -> {
-                    if (Boolean.TRUE.equals(aBoolean)) {
-                        Mono.error(new BadRequestException("Username already in use."));
-                    } else {
-                        log.info("Passed username validation for create request.");
+        final Mono<Boolean> isValidUsername = userDetailsRepository.existsByUsername(registerRequest.getUsername())
+                .flatMap(exists -> {
+                    if (exists) {
+                        return Mono.error(new BadRequestException("Username already in use."));
                     }
-                    return !aBoolean;
+                    log.info("{} passed username validation for create request.", registerRequest.getUsername());
+                    return Mono.just(true);
                 });
 
-        return Mono.zip(isValidEmail, isValidUsername, (f, s) -> f && s);
+        return Mono.zip(isValidEmail, isValidUsername)
+                .map(tuple -> tuple.getT1() && tuple.getT2());
     }
 }

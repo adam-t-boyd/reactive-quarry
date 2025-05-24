@@ -12,7 +12,7 @@ public class PasswordResolver {
     @NonNull private final PasswordEncoder passwordEncoder;
 
     @Named("encodePassword")
-    public String encodePassword(String rawPassword) {
+    public String encodePassword(final String rawPassword) {
         return passwordEncoder.encode(rawPassword);
     }
 }

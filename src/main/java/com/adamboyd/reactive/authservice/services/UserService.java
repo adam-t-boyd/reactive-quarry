@@ -12,6 +12,7 @@ public interface UserService {
 
     Mono<UserDTO> getUserByUsername(String username);
 
+    Mono<UserDTO> getUserByEmail(String email);
     Flux<UserDTO> getUser();
 
     Mono<UserDTO> getUser(BigDecimal userId);

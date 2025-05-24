@@ -23,27 +23,29 @@ public class UserServiceImpl implements UserService {
     private final static UserDTOMapper USER_DTO_MAPPER = UserDTOMapper.INSTANCE;
     private final static AuthenticationResponseMapper AUTHENTICATION_RESPONSE_MAPPER = AuthenticationResponseMapper.INSTANCE;
     private final static UserDetailsMapper USER_DETAILS_MAPPER = UserDetailsMapper.INSTANCE;
+    private static final String REGISTER_MSG = "You've successfully registered!";
 
     public Mono<UserDTO> getUserByUsername(String username) {
         return userDetailsRepository.findByUsername(username)
-                .map(USER_DTO_MAPPER::toUserDTO);
+                .map(USER_DTO_MAPPER::toUserDtoWithoutPassword);
     }
 
     @Override
     public Flux<UserDTO> getUser() {
         return userDetailsRepository.findAll()
-                .map(USER_DTO_MAPPER::toUserDTO);
+                .map(USER_DTO_MAPPER::toUserDtoWithoutPassword);
     }
 
     @Override
     public Mono<UserDTO> getUser(BigDecimal userId) {
         return userDetailsRepository.findById(userId)
-                .map(USER_DTO_MAPPER::toUserDTO);
+                .map(USER_DTO_MAPPER::toUserDtoWithoutPassword);
     }
 
+    @Override
     public Mono<UserDTO> getUserByEmail(String email) {
         return userDetailsRepository.findOneByEmail(email)
-                .map(USER_DTO_MAPPER::toUserDTO);
+                .map(USER_DTO_MAPPER::toUserDtoWithEncodedPassword);
     }
 
     @Override
@@ -55,7 +57,8 @@ public class UserServiceImpl implements UserService {
                             regReq, Role.ADMIN);
                     return userDetailsRepository.save(userDetailsBO);
                 })
-                .map(AUTHENTICATION_RESPONSE_MAPPER::toAuthenticationResponse);
+                .map(userDetailsBO -> AUTHENTICATION_RESPONSE_MAPPER.toAuthenticationResponse(
+                        userDetailsBO, REGISTER_MSG));
     }
 
     @Override
@@ -66,7 +69,7 @@ public class UserServiceImpl implements UserService {
                     UserDetailsBO userDetailsBO = USER_DETAILS_MAPPER.toUserDetailsBO(updateRequest, Role.ADMIN);
                     return userDetailsRepository.save(userDetailsBO);
                 })
-                .map(USER_DTO_MAPPER::toUserDTO);
+                .map(USER_DTO_MAPPER::toUserDtoWithoutPassword);
     }
 
     @Override

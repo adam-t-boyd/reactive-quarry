@@ -39,7 +39,7 @@ class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl serviceUnderTest;
     private static final UserDetailsBO userDetailsBO = getUserDetailsBO(1, "test@gmail.com", "test", "test123", ADMIN);
-    private static final UserDTO userDTO = UserDTOMapper.INSTANCE.toUserDTO(userDetailsBO);
+    private static final UserDTO userDTO = UserDTOMapper.INSTANCE.toUserDtoWithoutPassword(userDetailsBO);
 
     @Test
     void getUserByUsername() {
@@ -117,7 +117,7 @@ class UserServiceImplTest {
     @Test
     void createUserDetails_whenUserCredentialsAreValid_returnAuthenticationResponse() {
         final RegisterRequest registerRequest = new RegisterRequest("test@gmail.com", "test", "test123", "testFirstName", "testLastName");
-        AuthenticationResponse authenticationResponse = AuthenticationResponseMapper.INSTANCE.toAuthenticationResponse(userDetailsBO);
+        AuthenticationResponse authenticationResponse = AuthenticationResponseMapper.INSTANCE.toAuthenticationResponse(userDetailsBO, "You've successfully registered!");
 
        when(userDetailsRepository.save(any(UserDetailsBO.class)))
                 .thenReturn(Mono.just(userDetailsBO));

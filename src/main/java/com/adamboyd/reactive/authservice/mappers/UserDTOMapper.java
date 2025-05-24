@@ -12,6 +12,8 @@ import org.mapstruct.factory.Mappers;
 public interface UserDTOMapper {
     UserDTOMapper INSTANCE = Mappers.getMapper(UserDTOMapper.class);
 
-    @Mapping(target = "password", constant = "*****")
-    UserDTO toUserDTO(UserDetailsBO userDetailsBO);
+    UserDTO toUserDtoWithEncodedPassword(UserDetailsBO userDetailsBO);
+
+    @Mapping(target = "password", ignore = true)
+    UserDTO toUserDtoWithoutPassword(UserDetailsBO userDetailsBO);
 }

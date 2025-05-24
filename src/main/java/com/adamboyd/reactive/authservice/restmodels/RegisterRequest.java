@@ -2,12 +2,12 @@ package com.adamboyd.reactive.authservice.restmodels;
 
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-@Getter
-@Setter
+import java.util.Set;
+
 @NoArgsConstructor
 @Data
 public class RegisterRequest {
@@ -16,9 +16,7 @@ public class RegisterRequest {
     private String email;
     private String username;
     private String password;
-//    private String authority;
-//    Set<GrantedAuthority> authorities;
-
+    private Set<GrantedAuthority> authorities;
 
     public RegisterRequest(
             String email,
@@ -26,13 +24,12 @@ public class RegisterRequest {
             String password,
             String firstname,
             String lastname
-//                           String authority,
     ) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
-//        List.of(new SimpleGrantedAuthority(Role.ADMIN.getName()));
+        this.authorities = Set.of(new SimpleGrantedAuthority(Role.ADMIN.name()));
     }
 }
