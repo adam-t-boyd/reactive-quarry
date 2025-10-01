@@ -1,7 +1,7 @@
 package com.adamboyd.reactive.configuration;
 
-import com.adamboyd.reactive.authService.utils.AuthConverter;
-import com.adamboyd.reactive.authService.utils.AuthManager;
+import com.adamboyd.reactive.authservice.utils.AuthConverter;
+import com.adamboyd.reactive.authservice.utils.AuthManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,8 +38,7 @@ class SecurityConfig {
         jwtFilter.setServerAuthenticationConverter(jwtAuthConverter);
         return http
                 .authorizeExchange(auth -> {
-                    auth.pathMatchers("/v3/api-docs/**").permitAll();
-                    auth.pathMatchers("/auth/**").permitAll();
+                    auth.pathMatchers("/auth/**", "/swagger-ui.html", "/v3/api-docs/**", "/webjars/**").permitAll();
                     auth.anyExchange().authenticated();
                 })
                 .addFilterBefore(jwtFilter, SecurityWebFiltersOrder.AUTHENTICATION)
