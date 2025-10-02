@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 public interface QuarryService {
 
-    Flux<Quarry> getQuarries();
+    Flux<Quarry> getQuarries(final String countryCode, final Double latitude, final Double longitude);
 
     Mono<Quarry> getQuarry(BigDecimal quarryId);
 

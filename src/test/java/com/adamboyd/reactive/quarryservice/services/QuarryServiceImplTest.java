@@ -13,6 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+import java.util.Locale;
+
 import static com.adamboyd.reactive.quarryservice.data.QuarryData.buildQuarry;
 import static com.adamboyd.reactive.quarryservice.data.QuarryData.buildQuarryBO;
 import static org.mockito.ArgumentMatchers.any;
@@ -22,9 +24,10 @@ import static org.mockito.Mockito.when;
 class QuarryServiceImplTest {
     @Mock private QuarryMapper quarryMapper;
     @Mock private GenericMapper genericMapper;
-   @Mock
-   private QuarryRepository quarryRepository;
-    @InjectMocks private QuarryServiceImpl quarryService;
+    @Mock
+    private QuarryRepository quarryRepository;
+    @InjectMocks
+    private com.adamboyd.reactive.quarryservice.services.QuarryServiceImpl quarryService;
 
  private static final QuarryBO quarryBO = buildQuarryBO();
     private static final Quarry quarry = buildQuarry();
@@ -35,7 +38,7 @@ class QuarryServiceImplTest {
              .thenReturn(Flux.just(quarryBO));
      when(quarryMapper.toQuarry(any(QuarryBO.class))).thenReturn(quarry);
 
-     quarryService.getQuarries()
+        quarryService.getQuarries(Locale.IsoCountryCode.valueOf("UK").name(), 10.0, 10.0)
              .as(StepVerifier::create)
              .expectNext(quarry)
              .verifyComplete();

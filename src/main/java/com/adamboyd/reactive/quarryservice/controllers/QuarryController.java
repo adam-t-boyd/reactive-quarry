@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -38,8 +39,15 @@ public class QuarryController {
                     content = @Content)})
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public Flux<Quarry> getQuarries() {
-        return quarryService.getQuarries();
+    public Flux<ResponseEntity<Quarry>> getQuarries(@RequestParam(required = false) String countryCode,
+                                                    @RequestParam(required = false) Double latitude,
+                                                    @RequestParam(required = false) Double longitude) {
+        if (countryCode == null && (latitude == null || longitude == null)) {
+            return Flux.just(ResponseEntity.badRequest().build());
+        }
+
+        return quarryService.getQuarries(countryCode, latitude, longitude)
+                .map(ResponseEntity::ok);
     }
 
     @Operation(summary = "Retrieves quarry info by id.")
